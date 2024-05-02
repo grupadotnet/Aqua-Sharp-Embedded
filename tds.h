@@ -56,5 +56,6 @@ uint getTds() {
       //Serial.print("voltage:");
       //Serial.print(averageVoltage,2);
       //Serial.print("V   ");
+      return tds;
     }
   }

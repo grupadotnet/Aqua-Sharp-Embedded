@@ -28,6 +28,10 @@ const char password[] = SECRET_PASSWORD;
 const long interval = 30 * 1000;
 unsigned long previousMillis = 0;
 
+unsigned long int avgValue;
+int buf[50];
+int PHSamples = 15; //number of ph samples to be sampled
+
 OneWire ds(TEMP_SENSOR_PIN);
 DallasTemperature temp_sensor(&ds);
 
@@ -137,8 +141,19 @@ float getTemp(void) {
 }
 
 float getPh() {
-  int Volty = analogRead(PH_SENSOR_PIN);
-  float V = (float)Volty * 5.0 / 1024.0;
-  float pH = (float)V * 3.5;
-  return pH;
+  // Get PHSamples sample values from the sensor for smoothing
+  for (int i = 0; i < PHSamples; i++){      
+    buf[i] = analogRead(PH_SENSOR_PIN);
+    delay(10);
+  }
+  avgValue = 0;
+  // Take the average value of the central 15 samples
+  for (int i = 5; i <PHSamples; i++){
+    avgValue += buf[i];
+  }
+  // Convert the analog into millivolt
+  float phValue = (float)avgValue * 5.0 / 1024 / PHSamples;
+  // Convert the millivolt into pH value
+  phValue = phValue*4.49; 
+  return phValue;
 }
