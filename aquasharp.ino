@@ -19,7 +19,7 @@ MqttClient mqttClient(wifiClient);
 
 const char broker[] = SECRET_BROKER;
 int port = 1883;
-const char topic[] = "measurement/";
+const char topic[] = "measurement/2";
 
 const long interval = 30 * 1000;
 unsigned long previousMillis = 0;
